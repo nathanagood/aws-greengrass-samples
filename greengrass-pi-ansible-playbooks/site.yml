@@ -1,0 +1,9 @@
+---
+- name: Install the dependencies and other configurations necessary for AWS Greengrass
+  hosts: raspberry-pi
+  remote_user: pi
+  become: true
+  gather_facts: false
+
+  roles:
+    - greengrass

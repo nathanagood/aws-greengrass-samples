@@ -1,0 +1,49 @@
+# This playbook follows the setup documentation in the Greengrass 
+# Developers Guide (see TODO), page 13.
+
+# Add the group and user that will be used by AWS Greengrass
+- name: add-group
+  group:
+    name: ggc_group
+    system: yes
+
+- name: add-user
+  user:
+    name: ggc_user
+    comment: "Greengrass User"
+    group: ggc_group
+    system: yes
+
+# AWS Greengrass requires sqllite3 to be installed.
+- name: install-sqllite3
+  apt:
+    name: sqlite3
+    state: present
+    update_cache: yes
+
+# # TODO: Add tasks to update RPI? 
+
+- name: add-lines-to-file
+  blockinfile:
+    create: yes
+    path: /etc/sysctl.d/98-rpi.conf
+    block: |
+      fs.protected_hardlinks = 1
+      fs.protected_symlinks = 1
+
+- name: download-cgroups-script
+  get_url:
+    url: https://raw.githubusercontent.com/tianon/cgroupfs-mount/951c38ee8d802330454bdede20d85ec1c0f8d312/cgroupfs-mount
+    dest: /tmp/cgroupfs-mount.sh
+    mode: 0755
+
+- name: run-cgroups-script
+  shell: /tmp/cgroupfs-mount.sh
+  become: yes      
+
+# - name: reboot
+#   command: /sbin/shutdown -r +1
+#   async: 0
+#   poll: 0
+#   ignore_errors: true
+

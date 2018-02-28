@@ -10,6 +10,13 @@ This folder contains tools that help you check for system-level dependencies tha
 Refer to the requirements outlined in the Greengrass Documentation, as well as the Greengrass Getting Started Guide, Module 1:
 http://docs.aws.amazon.com/greengrass/latest/developerguide/gg-gs.html
 
+## greengrass-dependency-checker
+
+This folder contains [Ansible](https://www.ansible.com/) playbooks for initializing a 
+[Raspberry Pi](https://www.raspberrypi.org/). It will install the requirements and update configurations.
+Refer to the requirements outlined in the Greengrass Documentation, as well as the Greengrass Getting Started Guide, Module 1:
+http://docs.aws.amazon.com/greengrass/latest/developerguide/gg-gs.html
+
 ## hello-world-python
 
 This folder contains a sample Lambda function that uses the Greengrass SDK to publish a HelloWorld message to AWS IoT.
