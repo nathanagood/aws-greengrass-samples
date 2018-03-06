@@ -32,11 +32,11 @@ def run_payload_server():
     context = ModbusServerContext(slaves=store, single=True)
 
     identity = ModbusDeviceIdentification()
-    identity.VendorName = 'Pymodbus'
-    identity.ProductCode = 'PM'
-    identity.VendorUrl = 'http://github.com/bashwork/pymodbus/'
-    identity.ProductName = 'Pymodbus Server'
-    identity.ModelName = 'Pymodbus Server'
+    identity.VendorName = 'AWS Greengrass Samples'
+    identity.ProductCode = 'AWS'
+    identity.VendorUrl = 'https//github.com/aws-samples/aws-greengrass-samples'
+    identity.ProductName = 'Sample Local Server'
+    identity.ModelName = 'LocalServer'
     identity.MajorMinorRevision = '1.0'
 
     StartTcpServer(context, identity=identity, address=("127.0.0.1", 5020))
