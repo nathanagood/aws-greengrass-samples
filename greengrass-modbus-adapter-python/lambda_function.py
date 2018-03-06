@@ -10,19 +10,22 @@ from __future__ import print_function
 import logging
 import json
 import threading
+import time
 import os
 
 from pymodbus.client.sync import ModbusTcpClient
 
-from modbus_client import ConcurrentClient
+import greengrasssdk
 
 # pylint: disable=C0103
 logger = logging.getLogger('modbus_adapter')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 MODBUS_IP = os.environ.get('MODBUS_SERVER_IP', '127.0.0.1')
 MODBUS_PORT = int(os.environ.get('MODBUS_SERVER_PORT', '5020'))
 
+# pylint: disable=C0103
+greengrass_client = greengrasssdk.client('iot-data')
 
 def client_factory():
     """
@@ -34,6 +37,7 @@ def client_factory():
     return client
 
 
+#pylint: disable=unused-argument
 def function_handler(event, context):
     """
     Handler for the AWS Lambda function.
@@ -47,18 +51,38 @@ def function_handler(event, context):
 
     logger.debug('Handling event: %s', json.dumps(event))
 
-    client = ConcurrentClient(factory=client_factory, in_process=True)
+    client = client_factory()
+
     try:
-        futures = [client.read_coils(i * 8, 8) for i in range(10)]
-        for future in futures:
-            logger.info("Future result is: %s", future.result(timeout=1))
+        coil_values = [[False]*8]
+        while True:
+            result = client.read_coils(1, 8)
+            logger.debug("Received value: %s", result)
+            coil_values.append(result.bits)
+            logger.debug(coil_values)
+
+            if coil_values[0] != coil_values[1]:
+                mqtt_payload = {i: coil_values[1][i] for i in range(0, len(coil_values[1]))}
+                logger.debug("Values have changed, notifying with payload: %s",
+                             json.dumps(mqtt_payload)
+                            )
+                greengrass_client.publish(topic='modbus/demo', payload=json.dumps(mqtt_payload))
+            else:
+                logger.debug("Values are the same. Going back to sleep.")
+
+            # Sleep for 5 seconds
+            del coil_values[0]
+            time.sleep(5)
+
     finally:
-        client.shutdown()
+        client.close()
 
 
 if __name__ == '__main__':
     FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     logging.basicConfig(format=FORMAT)
+    logging.getLogger("pymodbus.factory").setLevel(logging.WARNING)
+    logging.getLogger("pymodbus.transaction").setLevel(logging.WARNING)
     logger.debug('Starting main...')
 
     # Mock up event data and a context object
