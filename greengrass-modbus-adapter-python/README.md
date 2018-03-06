@@ -2,7 +2,8 @@
 
 This folder contains a sample AWS Lambda function implemented in Python that demonstrates how to create a listener for communications using the [Modbus](https://en.wikipedia.org/wiki/Modbus) protocol.
 
-This example and documentation assumes you already have an AWS Greengrass device configured and are familiar with the process of deploying a Lambda function to AWS Greengrass. It's highly recommended that you follow the steps in "[Module 1: Environment Setup for Greengrass]()https://docs.aws.amazon.com/greengrass/latest/developerguide/module1.html", "Module 2: " under "[Getting Started with Greengrass](https://docs.aws.amazon.com/greengrass/latest/developerguide/gg-gs.html)"
+This example and documentation assumes you already have an AWS Greengrass device configured and are familiar with the process of deploying a Lambda function to AWS Greengrass. It's highly recommended that you follow the steps in
+"[Module 1: Environment Setup for Greengrass](https://docs.aws.amazon.com/greengrass/latest/developerguide/module1.html)", "[Module 2: Installing the Greengrass Core](https://docs.aws.amazon.com/greengrass/latest/developerguide/module2.html)", and "[Module 3 \(Parts 1 & 2\): AWS Lambda on AWS Greengrass](https://docs.aws.amazon.com/greengrass/latest/developerguide/module3-I.html)" under "[Getting Started with Greengrass](https://docs.aws.amazon.com/greengrass/latest/developerguide/gg-gs.html)"
 
 ## Files
 
