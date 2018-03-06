@@ -18,7 +18,7 @@ from pymodbus.client.sync import ModbusTcpClient
 import greengrasssdk
 
 # pylint: disable=C0103
-logger = logging.getLogger('modbus_adapter')
+logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 MODBUS_IP = os.environ.get('MODBUS_SERVER_IP', '127.0.0.1')
@@ -38,7 +38,7 @@ def client_factory():
 
 
 #pylint: disable=unused-argument
-def function_handler(event, context):
+def lambda_handler(event, context):
     """
     Handler for the AWS Lambda function.
     :param event: AWS Lambda uses this parameter to pass in event data to the handler. This
@@ -85,8 +85,8 @@ if __name__ == '__main__':
     logging.getLogger("pymodbus.transaction").setLevel(logging.WARNING)
     logger.debug('Starting main...')
 
-    # Mock up event data and a context object
-    function_event = {}
-    function_context = {}
+# Mock up event data and a context object
+function_event = {}
+function_context = {}
 
-    function_handler(function_event, function_context)
+lambda_handler(function_event, function_context)

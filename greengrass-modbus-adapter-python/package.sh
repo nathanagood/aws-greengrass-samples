@@ -38,8 +38,12 @@ if [ -f "${PYTHON}" ]; then
     # requirements
     if [ -f "${PIP}" ]; then
         ${PIP} install -r requirements.txt -t ${TEMP_PKG_DIR} >/dev/null 2>&1
+        # Copy the files from the additional folders to the temporary lib folder
+        tar cf - ${ADDITIONAL_FOLDERS} | tar -C ${TEMP_PKG_DIR} -xf - 
+        cp ${LAMBDA_FILE} ${TEMP_PKG_DIR}
+
         # Now zip up both the lambda and the lib
-        (cd ${TEMP_PKG_DIR} && ${ZIP} ${ZIP_ARGS} "../${LAMBDA_NAME}.zip" "../${LAMBDA_FILE}" ${ADDITIONAL_FOLDERS} *) >/dev/null 2>&1
+        (cd ${TEMP_PKG_DIR} && ${ZIP} ${ZIP_ARGS} "../${LAMBDA_NAME}.zip" ${ADDITIONAL_FOLDERS} *) >/dev/null 2>&1
 
         # Remove the lib directory
         if [ $? -eq 0 ]; then
